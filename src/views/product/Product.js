@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import ProductTable from '../../pages/reactTable/ProductTable'
 const Product = () => {
   return (
     <div>
@@ -18,6 +19,9 @@ const Product = () => {
           <option value="sd">sdfsd</option>
         </select>
         <input type="search" placeholder='Search Here' />
+      </div>
+      <div className='category-main'>
+       <ProductTable/>
       </div>
     </div>
   )

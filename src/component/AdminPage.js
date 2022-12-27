@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
@@ -17,9 +17,11 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { GoGraph } from "react-icons/go";
 import { BsGraphUp } from "react-icons/bs";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { Stack } from "@mui/system";
+import { Menu, MenuItem } from "@mui/material";
+import { AccountCircle } from "@mui/icons-material";
 const drawerWidth = 240;
 
 const Link = React.forwardRef(function Link(itemProps, ref) {
@@ -28,10 +30,15 @@ const Link = React.forwardRef(function Link(itemProps, ref) {
 
 function ListItemLink(props) {
   const { icon, primary, to } = props;
-
+  const location = useLocation();
   return (
     <li>
-      <ListItem button component={Link} to={to}>
+      <ListItem
+        button
+        component={Link}
+        to={to}
+        selected={to === location.pathname}
+      >
         {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
         <ListItemText primary={primary} />
       </ListItem>
@@ -110,9 +117,22 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const AdminPage = ({ children }) => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
+  const isMenuOpen = Boolean(anchorEl);
+  const navigate = useNavigate()
+  const handleProfileMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
+  const logoutMenu = ()=>{
+    setAnchorEl(null);
+    navigate("/login")
+  }
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -120,12 +140,34 @@ const AdminPage = ({ children }) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+  const menuId = "primary-search-account-menu";
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "center",
+      }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "center",
+      }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleMenuClose}>Dilip</MenuItem>
+      <MenuItem onClick={logoutMenu}>
+        logout
+      </MenuItem>
+    </Menu>
+  );
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar>
+        <Toolbar sx={{ justifyContent: "space-between" }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -139,8 +181,19 @@ const AdminPage = ({ children }) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Mini variant drawer
+            Admin Panel
           </Typography>
+          <IconButton
+            size="large"
+            edge="end"
+            aria-label="account of current user"
+            aria-controls={menuId}
+            aria-haspopup="true"
+            onClick={handleProfileMenuOpen}
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -167,15 +220,32 @@ const AdminPage = ({ children }) => {
           <ListItemLink
             to="/category"
             primary="Categories"
-            icon={<GoGraph />}
+            icon={
+              <GoGraph
+                className={({ isActive }) =>
+                  isActive ? "isActive" : "inActive"
+                }
+              />
+            }
           />
-          <ListItemLink to="/product" primary="Product" icon={<BsGraphUp />} />
+          <ListItemLink
+            to="/product"
+            primary="Product"
+            icon={
+              <BsGraphUp
+                className={({ isActive }) =>
+                  isActive ? "isActive" : "inActive"
+                }
+              />
+            }
+          />
         </List>
       </Drawer>
-      <Box component="main" className="admin_main" sx={{ flexGrow: 1, p: 5}}>
+      <Box component="main" className="admin_main" sx={{ flexGrow: 1, p: 5 }}>
         <DrawerHeader />
         {children}
       </Box>
+      {renderMenu}
     </Box>
   );
 };

@@ -4,7 +4,7 @@ import { useSortBy, useTable, usePagination } from "react-table";
 
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { COLUMNS } from "./Columns";
-const BasicTable = () => {
+const CategotyTable = () => {
   const columns = useMemo(() => COLUMNS, []);
   const [post, setPost] = useState([]);
 
@@ -84,15 +84,7 @@ const BasicTable = () => {
             );
           })}
         </tbody>
-        {/* <tfoot>
-        {footerGroups.map((footerGroups) => (
-          <tr {...footerGroups.getFooterGroupProps()}>
-          {footerGroups.headers.map((column) => (
-              <td {...column.getFooterProps}>{column.render("Footer")}</td>
-              ))}
-              </tr>
-        ))}
-      </tfoot> */}
+
         {/* <div className="pagination">
           <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
             {"<<"}
@@ -145,4 +137,4 @@ const BasicTable = () => {
   );
 };
 
-export default BasicTable;
+export default CategotyTable;

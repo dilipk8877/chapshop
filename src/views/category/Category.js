@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import BasicTable from '../../pages/reactTable/ReactTable'
+import CategotyTable from '../../pages/reactTable/CategoryTable'
 
 const Category = () => {
   return (
@@ -13,7 +13,7 @@ const Category = () => {
         <input type="search" placeholder='Search Here' />
       </div>
       <div className='category-main'>
-       <BasicTable/>
+       <CategotyTable/>
       </div>
     </div>
   )
