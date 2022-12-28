@@ -1,10 +1,13 @@
 import { useFormik } from "formik";
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { getLogin } from "../../feature/LoginSlice";
 const LoginPage = () => {
+  const {isLogin} = useSelector((state)=>state.auth)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { values, handleChange, handleBlur, handleSubmit } =
     useFormik({
       initialValues: {
@@ -20,6 +23,12 @@ const LoginPage = () => {
         dispatch(getLogin(data))
       },
     });
+
+    useEffect(() => {
+      if (isLogin) {
+        navigate("/dashboard");
+      }
+    }, [isLogin])
   return (
     <div className="loginForm">
       <div className="form">

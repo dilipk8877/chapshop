@@ -1,65 +1,56 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import customFetch, { setToken } from "../utils/apiGet";
 
-
 export const getLogin = createAsyncThunk(
-  "user/getUserLogin",
+  "user/getLogin",
   async (userData, { rejectWithValue }) => {
+    console.log(userData);
     try {
       const res = await customFetch.post("/user/login", userData);
-      localStorage.setItem("token", res.data.data.token);
-      localStorage.setItem('userFirst', res.data.data.first_name);
-      localStorage.setItem('userLast', res.data.data.last_name);
-      localStorage.setItem('email', res.data.data.email);
-      setToken(res.data.data.token);
+      localStorage.setItem("token", res.data.data.user.token);
+      setToken("token", res.data.data.user.token);
       return res.data;
-    } catch (err) {
-      console.log(err)
-      toast.error(err.response.data.Error);
-      return rejectWithValue(err.res.data.data);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.res.message);
+      return rejectWithValue(error.res.message);
     }
   }
 );
 
 const initialState = {
   loading: false,
-  userFirstName: localStorage.getItem('userFirst') ? localStorage.getItem('userFirst') : null,
-  userLastName: localStorage.getItem('userLast') ? localStorage.getItem('userLast') : null,
-  email: localStorage.getItem('email') ? localStorage.getItem('email') : null,
+  userInfo: {},
+  userToken: null,
   error: null,
   success: false,
-  isLogin: localStorage.getItem('token') ? true : false,
+  isLogin: localStorage.getItem("token") ? true : false,
 };
 
-const LoginSlice = createSlice({
-  name: "user",
+const authSlice = createSlice({
+  name: "auth",
   initialState,
   reducers: {
     logOutUser: (state) => {
       localStorage.clear();
       state.isLogin = false;
-      state.userFirstName = null;
-      state.userLastName = null;
-      state.email = null;
-      toast("Logout Successfully")
+      toast("Logout Successfully");
     },
   },
   extraReducers: {
+    // register user
     [getLogin.pending]: (state) => {
       state.loading = true;
       state.error = null;
     },
     [getLogin.fulfilled]: (state, { payload }) => {
-      console.log(payload)
+      state.userInfo=payload
       if (payload.status === 200) {
-        const { first_name, last_name, email } = payload.data;
-        state.userFirstName = first_name;
-        state.userLastName = last_name;
-        state.email = email;
         state.loading = false;
         state.isLogin = true;
-        toast("Welcome To Admin Panel")
+        toast("Welcome To Admin Panel");
+        state.success = true; // registration successful
       }
     },
     [getLogin.rejected]: (state, { payload }) => {
@@ -68,5 +59,6 @@ const LoginSlice = createSlice({
     },
   },
 });
-export const { logOutUser } = LoginSlice.actions;
-export default LoginSlice.reducer;
+
+export const { logOutUser } = authSlice.actions;
+export default authSlice.reducer;

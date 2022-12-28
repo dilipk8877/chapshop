@@ -1,11 +1,13 @@
-export const COLUMNS = [
+
+
+export const extractColumn = (data)=>  [
   {
     Header: "Category Name",
-    accessor: "name",
+    accessor: data.category_name,
   },
   {
     Header: "Sizes",
-    accessor: "phone",
+    accessor: data.sizes,
   },
   {
     Header: "Action",

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
@@ -22,6 +22,8 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { Stack } from "@mui/system";
 import { Menu, MenuItem } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { logOutUser } from "../feature/LoginSlice";
 const drawerWidth = 240;
 
 const Link = React.forwardRef(function Link(itemProps, ref) {
@@ -117,9 +119,12 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const AdminPage = ({ children }) => {
+  const {isLogin} = useSelector((state)=>state.auth)
   const [anchorEl, setAnchorEl] = React.useState(null);
+  // const {userName} = useSelector((state)=>state.auth.userInfo.data.user.firstName)
   const theme = useTheme();
   const [open, setOpen] = useState(true);
+  const dispatch = useDispatch()
   const isMenuOpen = Boolean(anchorEl);
   const navigate = useNavigate()
   const handleProfileMenuOpen = (event) => {
@@ -131,8 +136,16 @@ const AdminPage = ({ children }) => {
 
   const logoutMenu = ()=>{
     setAnchorEl(null);
+    dispatch(logOutUser())
     navigate("/login")
   }
+
+  useEffect(()=>{
+    if (!isLogin) {
+      navigate("/login");
+      localStorage.clear();
+    }
+  },[isLogin])
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -157,7 +170,7 @@ const AdminPage = ({ children }) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Dilip</MenuItem>
+      <MenuItem onClick={handleMenuClose}>kkkk</MenuItem>
       <MenuItem onClick={logoutMenu}>
         logout
       </MenuItem>

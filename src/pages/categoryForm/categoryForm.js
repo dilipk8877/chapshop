@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 const CategoryForm = () => {
+  const [category,setCategory]=useState({
+    category_name:"",
+    sizes:[""]
+  })
   return (
     <div className="categoryForm">
       <div>
@@ -20,6 +24,8 @@ const CategoryForm = () => {
               id="category"
               placeholder="Enter New Category"
               className="category-input"
+              value={category.category_name}
+              onChange={(e)=>setCategory(e.target.value)}
             />
           </div>
           <div>

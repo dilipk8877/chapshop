@@ -3,22 +3,12 @@ import { useMemo } from "react";
 import { useSortBy, useTable, usePagination } from "react-table";
 
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-import { COLUMNS } from "./Columns";
-const CategotyTable = () => {
-  const columns = useMemo(() => COLUMNS, []);
-  const [post, setPost] = useState([]);
+import { COLUMNS, extractColumn } from "./Columns";
+import { useDispatch, useSelector } from "react-redux";
+import { getCategoryList } from "../../feature/CategorySlice";
 
-  const getUser = async () => {
-    const res = await fetch("https://jsonplaceholder.typicode.com/users");
-    const userData = await res.json();
-    setPost(userData);
-  };
-
-  useEffect(() => {
-    getUser();
-  }, []);
-  const data = useMemo(() => post, [post]);
-
+const CategotyTable = ({data,columns}) => {
+ 
   const tableInstance = useTable(
     {
       columns,
