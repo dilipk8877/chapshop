@@ -51,11 +51,12 @@
 
 .categoryForm {
   width: 95%;
-  height: 50vh;
+  height: 70vh;
   background-color: #ffffff;
   padding: 10px;
   border-radius: 10px;
   margin-top: 30px;
+  position: relative;
 }
 
 .categoryForm_heading {
@@ -118,6 +119,7 @@
   width: 200px;
   display: flex;
   justify-content: space-between;
+  bottom: 0;
 }
 
 .Back-link {
@@ -401,3 +403,57 @@ input.form-control, input.form-control:focus {
   justify-content: center;
   align-items: center;
 }
+.dropzone{
+  width: 250px;
+  height: 8vh;
+  background-color: #dae9f7;
+  border-radius: 5px;
+  text-align: center;
+  border: 2px dotted gray;
+  color: rgb(11, 19, 19);
+}
+
+.category-image-filled{
+  width: 300px;
+  height: 130px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.category-image-filled img{
+  width: 150px;
+  height: 100px;
+  border: 1px solid gray;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.category-size{
+  width: 250px;
+  height: auto;
+  display: flex;
+}
+
+.save-sizes{
+  text-align: center;
+  margin-top: 10px;
+
+}
+.save-sizes p{
+  margin-right: 5px;
+  width: 50px;
+  background-color: #5d6063;
+  color: #ffffff;
+}
+
+.categoryForm-wrap .save-sizes p{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.custom-flexwrap {
+  flex-wrap: wrap;
+}
+

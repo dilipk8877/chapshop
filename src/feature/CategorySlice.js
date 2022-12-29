@@ -13,8 +13,13 @@ export const getCategoryList = createAsyncThunk("categoryList/getCategoryList",a
 })
 
 export const addCategoryList = createAsyncThunk("addCategory/getCategoryList",async(data,thunkAPI)=>{
+    console.log(data.items)
     try{
-        const res = await customFetch.post("/category/addCategory",data)
+        let fData = new FormData();
+        fData.append("category_image",data.category_image)
+    fData.append("category_name", data.category_name);
+    data.items.forEach(item => fData.append("sizes[]", item));
+        const res = await customFetch.post("/category/addCategory",fData)
         thunkAPI.dispatch(getCategoryList(data))
         return res.data
     }catch(error){
