@@ -1,54 +1,105 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import customFetch, { setToken } from "../utils/apiGet";
+import { toast } from "react-toastify";
+import customFetch from "../utils/apiGet";
 
-
-export const getCategoryList = createAsyncThunk("categoryList/getCategoryList",async()=>{
-    try{
-        const res = await customFetch.get("/category/categoryList")
-        console.log(res.data)
-        return res.data
-    }catch(error){
-        console.log(error);
+export const getCategoryList = createAsyncThunk(
+  "categoryList/getCategoryList",
+  async () => {
+    try {
+      const res = await customFetch.get("/category/categoryList");
+    
+      return res.data;
+    } catch (error) {
+      console.log(error);
     }
-})
+  }
+);
 
-export const addCategoryList = createAsyncThunk("addCategory/getCategoryList",async(data,thunkAPI)=>{
-    console.log(data.items)
+export const addCategoryList = createAsyncThunk(
+  "addCategory/getCategoryList",
+  async (datas, thunkAPI) => {
+    const {category_name,items,fieldImage} = datas
+    console.log(fieldImage)
+    try {
+      let fData = new FormData();
+      fData.append("category_image",fieldImage,fieldImage.name);
+      fData.append("category_name", category_name);
+      items.forEach((item) => fData.append("sizes[]", item.name));
+        console.log(fData);
+      const res = await customFetch.post("/category/addCategory", fData);
+      thunkAPI.dispatch(getCategoryList());
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const editCategory = createAsyncThunk("edit/getCategoryList",async(data,thunkAPI)=>{
+    console.log(data)
+    const {category_id,category_name,items,fieldImage} = data
+    console.log(category_id._id)
     try{
         let fData = new FormData();
-        fData.append("category_image",data.category_image)
-    fData.append("category_name", data.category_name);
-    data.items.forEach(item => fData.append("sizes[]", item));
-        const res = await customFetch.post("/category/addCategory",fData)
-        thunkAPI.dispatch(getCategoryList(data))
+        fData.append("category_image",fieldImage,fieldImage.name);
+        fData.append("category_name", category_name);
+        items.forEach((item) => fData.append("sizes[]", item.name));
+        fData.append("category_id", category_id._id);
+        const res = await customFetch.put("/category/updateCategory", fData);
+        thunkAPI.dispatch(getCategoryList(data));
+        return res.data;
+    }catch(error){
+        console.log(error)
+    }
+})
+
+export const deleteCategory = createAsyncThunk("delete/getCategoryList",async(id,thunkAPI)=>{
+    console.log(id)
+    try{
+        const res  = await customFetch.delete(`/category/deleteCategory/${id}`)
+        thunkAPI.dispatch(getCategoryList(id))
+        toast.success("Successfully delete Category")
         return res.data
     }catch(error){
         console.log(error);
     }
 })
 
-const initialState ={
-    status:null,
-    category:[]
-}
+const initialState = {
+  status: null,
+  category: [],
+  category_id:null,
+  toggleState: true,
+};
 
 const categorySlice = createSlice({
-    name:"category",
-    initialState,
-    reducers:{},
-    extraReducers:{
-        [getCategoryList.pending]:(state,action)=>{
-            state.status="loading"
-        },
-        [getCategoryList.fulfilled]:(state,action)=>{
-            console.log(action);
-            state.status="success"
-            state.category= action.payload
-        },
-        [getCategoryList.pending]:(state,action)=>{
-            state.status="error"
-        },
-    }
-})
-
-export default categorySlice.reducer
+  name: "category",
+  initialState,
+  reducers: {
+    setCategoryId:(state,action)=>{
+        console.log(action.payload)
+        state.category_id = action.payload
+    },
+    setTogglePromo: (state, action) => {
+        state.toggleState = false;
+      },
+      setToggleFalse: (state, action) => {
+        state.toggleState = true;
+      },
+  },
+  extraReducers: {
+    [getCategoryList.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [getCategoryList.fulfilled]: (state, action) => {
+      console.log(action);
+      state.status = "success";
+      state.category = action.payload;
+    },
+    [getCategoryList.pending]: (state, action) => {
+      state.status = "error";
+    },
+  },
+});
+export const {setCategoryId,setTogglePromo,setToggleFalse} = categorySlice.actions
+export default categorySlice.reducer;
