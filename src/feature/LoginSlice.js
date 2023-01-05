@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import customFetch, { setToken } from "../utils/apiGet";
+import axios from "axios";
 
 export const getLogin = createAsyncThunk(
   "user/getLogin",
   async (userData, { rejectWithValue }) => {
-    console.log(userData);
     try {
-      const res = await customFetch.post("/user/login", userData);
+      const res = await axios.post("http://localhost:5001/api/v1/user/login", userData);
       localStorage.setItem("token", res.data.data.user.token);
       setToken("token", res.data.data.user.token);
       return res.data;
@@ -35,7 +35,7 @@ const authSlice = createSlice({
     logOutUser: (state) => {
       localStorage.clear();
       state.isLogin = false;
-      toast("Logout Successfully");
+      // toast("Logout Successfully");
     },
   },
   extraReducers: {

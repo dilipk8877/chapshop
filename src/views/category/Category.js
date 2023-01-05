@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { deleteCategory, editCategory, getCategoryList, setCategoryId, setToggleFalse, setTogglePromo } from '../../feature/CategorySlice'
+import { deleteCategory, getCategoryList, setCategoryId, setTogglePromo } from '../../feature/CategorySlice'
+import { setToggleProductFormTrue } from '../../feature/ProductSlice'
 import CategotyTable from '../../pages/reactTable/CategoryTable'
 
 const Category = () => {
@@ -38,7 +39,6 @@ const Category = () => {
       accessor: "action",
       disableSortBy: true,
       Cell: (tableProps) => {
-        console.log(tableProps.row.original._id)
         const rowIdx = tableProps.row.original._id
         return (
           <>
@@ -56,7 +56,6 @@ const Category = () => {
  
 
   const data = useMemo(() => category?.data, [category]);
-  console.log(category?.data)
   return (
     <div className='category_main'>
       <div className='category_header'>

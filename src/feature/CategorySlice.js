@@ -19,13 +19,12 @@ export const addCategoryList = createAsyncThunk(
   "addCategory/getCategoryList",
   async (datas, thunkAPI) => {
     const {category_name,items,fieldImage} = datas
-    console.log(fieldImage)
+
     try {
       let fData = new FormData();
-      fData.append("category_image",fieldImage,fieldImage.name);
+      fieldImage.forEach((image)=>fData.append("category_image",image,image.name))
       fData.append("category_name", category_name);
       items.forEach((item) => fData.append("sizes[]", item.name));
-        console.log(fData);
       const res = await customFetch.post("/category/addCategory", fData);
       thunkAPI.dispatch(getCategoryList());
       return res.data;
@@ -36,9 +35,7 @@ export const addCategoryList = createAsyncThunk(
 );
 
 export const editCategory = createAsyncThunk("edit/getCategoryList",async(data,thunkAPI)=>{
-    console.log(data)
     const {category_id,category_name,items,fieldImage} = data
-    console.log(category_id._id)
     try{
         let fData = new FormData();
         fData.append("category_image",fieldImage,fieldImage.name);
@@ -54,7 +51,6 @@ export const editCategory = createAsyncThunk("edit/getCategoryList",async(data,t
 })
 
 export const deleteCategory = createAsyncThunk("delete/getCategoryList",async(id,thunkAPI)=>{
-    console.log(id)
     try{
         const res  = await customFetch.delete(`/category/deleteCategory/${id}`)
         thunkAPI.dispatch(getCategoryList(id))
@@ -77,7 +73,6 @@ const categorySlice = createSlice({
   initialState,
   reducers: {
     setCategoryId:(state,action)=>{
-        console.log(action.payload)
         state.category_id = action.payload
     },
     setTogglePromo: (state, action) => {
@@ -92,7 +87,6 @@ const categorySlice = createSlice({
       state.status = "loading";
     },
     [getCategoryList.fulfilled]: (state, action) => {
-      console.log(action);
       state.status = "success";
       state.category = action.payload;
     },

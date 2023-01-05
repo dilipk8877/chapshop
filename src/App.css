@@ -234,9 +234,10 @@ margin-top: 40px;
 
 .productForm{
   background-color: #ffffff;
-  height: 80vh;
-  padding-left: 150px;
+  height:auto;
+  padding-left: 100px;
   padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 .productForm-select{
@@ -457,3 +458,23 @@ input.form-control, input.form-control:focus {
   flex-wrap: wrap;
 }
 
+.size-style{
+  display: flex;
+}
+
+.select-category-productForm{
+  width: 450px;
+}
+
+.all-size-list{
+  width: 750px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.sharing-image{
+  display: flex;
+  gap: 20px;
+  justify-content: start;
+}

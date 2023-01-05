@@ -1,32 +1,23 @@
 import React, { useCallback, useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
 
-const Dropzone = ({setImages,images}) => {
+const SharingDragzone = ({sharingImage,setSharingImage}) => {
 
     const onDrop = useCallback((acceptedFiles,rejectedFiles)=>{
-        setImages(acceptedFiles.map(file => Object.assign(file, {
+        setSharingImage(acceptedFiles.map(file => Object.assign(file, {
             preview: URL.createObjectURL(file)
           })));
-        // acceptedFiles.forEach(file => {
-        //     const reader = new FileReader()
-        //     reader.onload=()=>{
-        //         setImages(prevState=>[...prevState,reader.result])
-        //     }
-        //     reader.readAsDataURL(file)
-        // });
-        console.log("accept",acceptedFiles)
-        console.log("reject",rejectedFiles)
     },[])
 
     useEffect(()=>{
-     images.forEach(file => URL. revokeObjectURL (file.preview));
-    },[images])
+    //  sharingImage.forEach(file => URL. revokeObjectURL (file.preview));
+    },[sharingImage])
     const {getRootProps,getInputProps,isDragAccept} = useDropzone({onDrop,
         accept: {
             'image/jpeg': [],
             'image/png': []
           },
-          maxFiles:1
+          maxFiles:5
         })
   return (
     <div className='dropzone' {...getRootProps()}>
@@ -36,4 +27,4 @@ const Dropzone = ({setImages,images}) => {
   )
 }
 
-export default Dropzone
+export default SharingDragzone

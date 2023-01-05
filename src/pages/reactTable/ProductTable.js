@@ -4,20 +4,20 @@ import { useSortBy, useTable, usePagination } from "react-table";
 
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { PRODUCT_COLUMNS } from "./Columns";
-const ProductTable = () => {
-  const columns = useMemo(() => PRODUCT_COLUMNS, []);
-  const [post, setPost] = useState([]);
+const ProductTable = ({data,columns}) => {
+  // const columns = useMemo(() => PRODUCT_COLUMNS, []);
+  // const [post, setPost] = useState([]);
 
-  const getUser = async () => {
-    const res = await fetch("https://jsonplaceholder.typicode.com/users");
-    const userData = await res.json();
-    setPost(userData);
-  };
+  // const getUser = async () => {
+  //   const res = await fetch("https://jsonplaceholder.typicode.com/users");
+  //   const userData = await res.json();
+  //   setPost(userData);
+  // };
 
-  useEffect(() => {
-    getUser();
-  }, []);
-  const data = useMemo(() => post, [post]);
+  // useEffect(() => {
+  //   getUser();
+  // }, []);
+  // const data = useMemo(() => post, [post]);
 
   const tableInstance = useTable(
     {

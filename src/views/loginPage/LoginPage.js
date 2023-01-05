@@ -19,7 +19,6 @@ const LoginPage = () => {
         password: Yup.string().required("password is reaquired"),
       }),
       onSubmit: (data) => {
-        console.log(data);
         dispatch(getLogin(data))
       },
     });
