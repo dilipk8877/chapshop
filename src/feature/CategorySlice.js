@@ -7,7 +7,6 @@ export const getCategoryList = createAsyncThunk(
   async () => {
     try {
       const res = await customFetch.get("/category/categoryList");
-    
       return res.data;
     } catch (error) {
       console.log(error);
@@ -66,6 +65,7 @@ const initialState = {
   category: [],
   category_id:null,
   toggleState: true,
+  initialValue:null
 };
 
 const categorySlice = createSlice({
@@ -73,6 +73,7 @@ const categorySlice = createSlice({
   initialState,
   reducers: {
     setCategoryId:(state,action)=>{
+      console.log(action.payload)
         state.category_id = action.payload
     },
     setTogglePromo: (state, action) => {
@@ -80,6 +81,10 @@ const categorySlice = createSlice({
       },
       setToggleFalse: (state, action) => {
         state.toggleState = true;
+      },
+      setInitialValue: (state, action) => {
+
+        state.initialValue = action.payload;
       },
   },
   extraReducers: {
@@ -95,5 +100,5 @@ const categorySlice = createSlice({
     },
   },
 });
-export const {setCategoryId,setTogglePromo,setToggleFalse} = categorySlice.actions
+export const { setInitialValue,setCategoryId,setTogglePromo,setToggleFalse} = categorySlice.actions
 export default categorySlice.reducer;

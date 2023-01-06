@@ -4,29 +4,22 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   addCategoryList,
   editCategory,
+  setInitialValue,
   setToggleFalse,
 } from "../../feature/CategorySlice";
 import { RxCross2 } from "react-icons/rx";
 import Dropzone from "../dropeZone/Dropzone";
 import { useDropzone } from "react-dropzone";
 const CategoryForm = () => {
-  const { toggleState, category_id } = useSelector((state) => state.categories);
+  const { toggleState, category_id, initialValue } = useSelector((state) => state.categories);
   // const categoryId = category_id._id
-
   const [post, setPost] = useState("");
   const [items, setItems] = useState([]);
   const dispatch = useDispatch();
-  const [category_name, setCategory_name] = useState();
-  const [image, setImage] = useState([]);
+  const [category_name, setCategory_name] = useState(initialValue?.category_name ? initialValue?.category_name:"" );
   const [fieldImage, setFieldImage] = useState();
-  const [images, setImages] = useState([]);
 
-  const thumbs = images.map((file) => (
-    <div key={file.name}>
-      <img src={file.preview} alt={file.name} width="150" height="150" />
-    </div>
-  ));
-
+console.log(fieldImage)
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
     setFieldImage(
       acceptedFiles.map((file) =>
@@ -38,8 +31,8 @@ const CategoryForm = () => {
   }, []);
 
   useEffect(() => {
-    images.forEach((file) => URL.revokeObjectURL(file.preview));
-  }, [images]);
+    fieldImage?.forEach((file) => URL.revokeObjectURL(file.preview));
+  }, [fieldImage]);
   const { getRootProps, getInputProps, isDragAccept } = useDropzone({
     onDrop,
     accept: {
@@ -48,20 +41,18 @@ const CategoryForm = () => {
     },
     maxFiles: 1,
   });
-  const navigate = useNavigate();
+
 
   const saveCategory = (e) => {
     e.preventDefault();
-    dispatch(addCategoryList({ category_name, items, fieldImage }))
-    // dispatch(addCategoryList({ category_name, items, images }));
-    // if()
+    dispatch(addCategoryList({ category_name, items, fieldImage }));
   };
 
   const updateCategory = (e) => {
     e.preventDefault();
-    dispatch(editCategory({category_name, items, fieldImage, category_id}))
-    // dispatch(editCategory({ category_name, items, images, category_id }));
+    dispatch(editCategory({ category_name, items, fieldImage, category_id }));
   };
+
   const addSizes = () => {
     const allpost = { id: new Date().getTime().toString(), name: post };
     setItems([...items, allpost]);
@@ -73,6 +64,17 @@ const CategoryForm = () => {
     });
     setItems(updatedItems);
   };
+
+  const thumbs = fieldImage?.map((file) => (
+    <div key={file.name}>
+      <img src={file.preview} alt={file.name} width="150" height="150" />
+    </div>
+  ));
+
+  const handleBack = ()=>{
+    dispatch(setToggleFalse())
+    dispatch(setInitialValue(""))
+  }
   return (
     <div className="categoryForm">
       <div>
@@ -133,6 +135,7 @@ const CategoryForm = () => {
                 <input {...getInputProps()} />
                 {isDragAccept ? "Drag Active" : "You can drop your file here."}
               </div>
+              <div className="sharing-image">{thumbs}</div>
               {/* <input
                 type="file"
                 className="category-file"
@@ -141,7 +144,6 @@ const CategoryForm = () => {
                 onChange={(e) =>{ setFieldImage(e.target.files[0]) ;setImage(URL.createObjectURL(e.currentTarget.files[0]))}}
                 // onChange={(e)=>{setFieldValue("category_image",e.currentTarget.files[0]); setImage(URL.createObjectURL(e.currentTarget.files[0])) }}
               /> */}
-              {thumbs}
               {/* {
                 images.length>0 &&  <div className="category-image-filled">
                   {images.map((image,index)=>{
@@ -153,14 +155,13 @@ const CategoryForm = () => {
                   })}
                 </div>
               } */}
-             
             </p>
           </div>
           <div className="categoryForm-button">
             <Link
               to="/category"
               className="Back-link"
-              onClick={() => dispatch(setToggleFalse())}
+              onClick={handleBack}
             >
               Back
             </Link>

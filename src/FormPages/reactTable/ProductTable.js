@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { useMemo } from "react";
-import { useSortBy, useTable, usePagination } from "react-table";
+import React from "react";
+import {
+  useSortBy,
+  useTable,
+  usePagination,
+  useGlobalFilter,
+} from "react-table";
 
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-import { COLUMNS, extractColumn } from "./Columns";
-import { useDispatch, useSelector } from "react-redux";
-import { getCategoryList } from "../../feature/CategorySlice";
-
-const CategotyTable = ({data,columns}) => {
- 
+import GlobalSearch from "../../views/adminPanel/product/globalFilter/GlobalSearch";
+const ProductTable = ({ data, columns }) => {
   const tableInstance = useTable(
     {
       columns,
       data,
       initialState: { pageIndex: 0 },
     },
+    useGlobalFilter,
     useSortBy,
     usePagination
   );
@@ -25,6 +26,8 @@ const CategotyTable = ({data,columns}) => {
     headerGroups,
     page,
     prepareRow,
+    state,
+    setGlobalFilter,
     canPreviousPage,
     canNextPage,
     pageOptions,
@@ -35,8 +38,14 @@ const CategotyTable = ({data,columns}) => {
     setPageSize,
     state: { pageIndex, pageSize },
   } = tableInstance;
+
+  const { globalFilter } = state;
   return (
-    <>
+    <div>
+      <div className="global-search">
+        <GlobalSearch filter={globalFilter} setFilter={setGlobalFilter} />
+      </div>
+      <div>
       <table {...getTableProps()} className="category-table">
         <thead className="category-table-head">
           {headerGroups.map((headerGroups) => (
@@ -123,8 +132,9 @@ const CategotyTable = ({data,columns}) => {
           </select>
         </div> */}
       </table>
-    </>
+      </div>
+    </div>
   );
 };
 
-export default CategotyTable;
+export default ProductTable;

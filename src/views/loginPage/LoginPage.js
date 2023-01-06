@@ -25,7 +25,7 @@ const LoginPage = () => {
 
     useEffect(() => {
       if (isLogin) {
-        navigate("/dashboard");
+        navigate("/category");
       }
     }, [isLogin])
   return (

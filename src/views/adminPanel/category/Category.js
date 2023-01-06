@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { deleteCategory, getCategoryList, setCategoryId, setTogglePromo } from '../../feature/CategorySlice'
-import { setToggleProductFormTrue } from '../../feature/ProductSlice'
-import CategotyTable from '../../pages/reactTable/CategoryTable'
+import { deleteCategory, getCategoryList, setCategoryId, setInitialValue, setTogglePromo } from '../../../feature/CategorySlice'
+import { setToggleProductFormTrue } from '../../../feature/ProductSlice'
+import CategotyTable from '../../../FormPages/reactTable/CategoryTable'
 
 const Category = () => {
   const category = useSelector((store)=>store.categories.category)
@@ -13,6 +13,7 @@ const Category = () => {
     dispatch(setCategoryId(item))
     dispatch(setTogglePromo())
     navigate("/category_form")
+    dispatch(setInitialValue(item));
 
   }
   // const columns = useMemo(() => extractColumn(category.data), []);
@@ -33,6 +34,11 @@ const Category = () => {
     {
       Header: "Sizes",
       accessor: "sizes",
+      Cell:(tableProps)=>{
+        return (
+          tableProps.row.original.sizes.join(",")
+        )
+      }
     },
     {
       Header: "Action",
@@ -61,9 +67,6 @@ const Category = () => {
       <div className='category_header'>
         <p className='category_header'>Categories</p>
         <Link className='create_button' to="/category_form">Create New</Link>
-      </div>
-      <div className='category_search'>
-        <input type="search" placeholder='Search Here' />
       </div>
       <div className='category-main'>
        {category?.data?.length>0 && <CategotyTable

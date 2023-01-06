@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { deleteProduct, getProductList, setProductId, setToggleProductFormFalse } from "../../feature/ProductSlice";
-import ProductTable from "../../pages/reactTable/ProductTable";
+import { deleteProduct, getProductList, setProductId, setToggleProductFormFalse } from "../../../feature/ProductSlice";
+import ProductTable from "../../../FormPages/reactTable/ProductTable";
 const Product = () => {
   const product = useSelector((state) => state.products.product);
   const dispatch = useDispatch();
@@ -71,7 +71,6 @@ const Product = () => {
     dispatch(getProductList());
   }, []);
   const data = useMemo(() => product?.data, [product]);
-
   return (
     <div>
       <div className="product_header">
@@ -90,7 +89,7 @@ const Product = () => {
           <option value="sd">sdfsd</option>
           <option value="sd">sdfsd</option>
         </select>
-        <input type="search" placeholder="Search Here" />
+        {/* <input type="search" placeholder="Search Here"  /> */}
       </div>
       <div className="category-main">
         {product?.data?.length>0 && <ProductTable data={data} columns={columns} />}

@@ -1,30 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { useMemo } from "react";
-import { useSortBy, useTable, usePagination } from "react-table";
+import React from "react";
+import { useSortBy, useTable, usePagination, useGlobalFilter } from "react-table";
 
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-import { PRODUCT_COLUMNS } from "./Columns";
-const ProductTable = ({data,columns}) => {
-  // const columns = useMemo(() => PRODUCT_COLUMNS, []);
-  // const [post, setPost] = useState([]);
+import GlobalSearch from "../../views/adminPanel/product/globalFilter/GlobalSearch";
 
-  // const getUser = async () => {
-  //   const res = await fetch("https://jsonplaceholder.typicode.com/users");
-  //   const userData = await res.json();
-  //   setPost(userData);
-  // };
-
-  // useEffect(() => {
-  //   getUser();
-  // }, []);
-  // const data = useMemo(() => post, [post]);
-
+const CategotyTable = ({ data, columns }) => {
   const tableInstance = useTable(
     {
       columns,
       data,
       initialState: { pageIndex: 0 },
     },
+    useGlobalFilter,
     useSortBy,
     usePagination
   );
@@ -35,6 +22,8 @@ const ProductTable = ({data,columns}) => {
     headerGroups,
     page,
     prepareRow,
+    state,
+    setGlobalFilter,
     canPreviousPage,
     canNextPage,
     pageOptions,
@@ -45,47 +34,56 @@ const ProductTable = ({data,columns}) => {
     setPageSize,
     state: { pageIndex, pageSize },
   } = tableInstance;
-  return (
-    <>
-      <table {...getTableProps()} className="category-table">
-        <thead className="category-table-head">
-          {headerGroups.map((headerGroups) => (
-            <tr {...headerGroups.getHeaderGroupProps()}>
-              {headerGroups.headers.map((columns) => (
-                <th {...columns.getHeaderProps(columns.getSortByToggleProps())}>
-                  {columns.render("Header")}
-                  <span>
-                    {columns.isSorted ? (
-                      columns.isSortedDesc ? (
-                        <FaAngleDown />
-                      ) : (
-                        <FaAngleUp />
-                      )
-                    ) : (
-                      ""
-                    )}
-                  </span>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()} className="category-table-body">
-          {page.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <th {...cell.getCellProps()}>{cell.render("Cell")}</th>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
 
-        {/* <div className="pagination">
+  const { globalFilter } = state;
+
+  return (
+    <div>
+      <div className="global-search">
+        <GlobalSearch filter={globalFilter} setFilter={setGlobalFilter} />
+      </div>
+      <div>
+        <table {...getTableProps()} className="category-table">
+          <thead className="category-table-head">
+            {headerGroups.map((headerGroups) => (
+              <tr {...headerGroups.getHeaderGroupProps()}>
+                {headerGroups.headers.map((columns) => (
+                  <th
+                    {...columns.getHeaderProps(columns.getSortByToggleProps())}
+                  >
+                    {columns.render("Header")}
+                    <span>
+                      {columns.isSorted ? (
+                        columns.isSortedDesc ? (
+                          <FaAngleDown />
+                        ) : (
+                          <FaAngleUp />
+                        )
+                      ) : (
+                        ""
+                      )}
+                    </span>
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()} className="category-table-body">
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <th {...cell.getCellProps()}>{cell.render("Cell")}</th>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+
+          {/* <div className="pagination">
           <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
             {"<<"}
           </button>{" "}
@@ -132,9 +130,10 @@ const ProductTable = ({data,columns}) => {
             ))}
           </select>
         </div> */}
-      </table>
-    </>
+        </table>
+      </div>
+    </div>
   );
 };
 
-export default ProductTable;
+export default CategotyTable;
