@@ -12,6 +12,7 @@ import customFetch, { setToken } from "./utils/apiGet";
 import { logOutUser } from "./feature/LoginSlice";
 import UserCategory from "./views/userPanel/UserCategory";
 import ProductList from "./views/userPanel/ProductList";
+import ProductDetails from "./views/userPanel/ProductDetails";
 
 const App = () => {
   const {isLogin} = useSelector((state)=>state.auth)
@@ -41,8 +42,9 @@ const App = () => {
         </Route>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/UserCategory" element={<UserCategory/>}/>
+        <Route path="/userCategory" element={<UserCategory/>}/>
         <Route path="/productList" element={<ProductList/>}/>
+        <Route path="/productDetails" element={<ProductDetails/>}/>
       </Routes>
     </>
   );

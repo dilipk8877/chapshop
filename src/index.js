@@ -8,17 +8,18 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Provider } from 'react-redux';
 import store from './store';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  // <React.StrictMode>
+  <React.StrictMode>
     <Provider store={store}>
     <BrowserRouter>
     <ToastContainer newestOnTop={false} closeOnClick autoClose={1500}/>
     <App />
     </BrowserRouter>
     </Provider>
-  // </React.StrictMode>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

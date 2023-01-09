@@ -26,6 +26,7 @@ const ProductForm = () => {
     (item) => item._id === selectedOption?.id
   );
 
+  console.log(categoryFiltered)
   const arraySorted = [];
   category?.data?.map((item) =>
     arraySorted.push([item.category_name, item._id])
@@ -64,6 +65,7 @@ const ProductForm = () => {
         mainImage: mainImage,
         sharingImages: sharingImage,
         sizes: sizes,
+        is_draft: false,
       })
     );
     setTimeout(() => {
@@ -168,7 +170,7 @@ const ProductForm = () => {
         <div className="product-size">
           <span>Select Sizes</span>
           <div className="all-size-list">
-            {categoryFiltered[0] &&
+            {categoryFiltered &&  categoryFiltered.length>=1 &&
               categoryFiltered[0]?.sizes?.map((size, idx) => {
                 return (
                   <div className="size-label" key={idx}>

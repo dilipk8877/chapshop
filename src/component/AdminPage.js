@@ -121,7 +121,8 @@ const Drawer = styled(MuiDrawer, {
 const AdminPage = ({ children }) => {
   const {isLogin} = useSelector((state)=>state.auth)
   const [anchorEl, setAnchorEl] = React.useState(null);
-  // const {userName} = useSelector((state)=>state.auth.userInfo.data.user.firstName)
+  const {userName} = useSelector((state)=>state.auth.userInfo)
+  console.log(userName)
   const theme = useTheme();
   const [open, setOpen] = useState(true);
   const dispatch = useDispatch()

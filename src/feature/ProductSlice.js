@@ -39,6 +39,7 @@ export const addProduct = createAsyncThunk(
       fData.append("buying_price", buying_price);
       fData.append("reselling_price", reselling_price);
       fData.append("sku", sku);
+      fData.append("is_draft", false);
       fData.append("category_id", category_id);
       sizes.forEach((item) => fData.append("sizes[]", item));
       const res = await customFetch.post("product/addProduct", fData);

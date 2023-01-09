@@ -20,7 +20,7 @@ const UserCategory = () => {
 
   const goProductList = (item)=>{
     dispatch(getUserProductList(item._id))
-    navigate("/productList")
+    navigate(`/productList`)
   }
   return (
     <div className="user-main">

@@ -4,13 +4,15 @@ import categorySlice from "./feature/CategorySlice"
 import ProductSlice from "./feature/ProductSlice";
 import UserCategorySlice from "./feature/UserCategorySlice";
 import UserProductListSlice from "./feature/UserProductListSlice"
+import userProductDetailSlice from "./feature/UserProductDetails"
 const store = configureStore({
     reducer:{
       auth:authSlice,
       categories:categorySlice,
       products:ProductSlice,
       userCategories:UserCategorySlice,
-      userProductList: UserProductListSlice
+      userProductList: UserProductListSlice,
+      userProductDetail: userProductDetailSlice
     }
   })
 
