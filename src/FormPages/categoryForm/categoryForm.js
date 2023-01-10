@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import {
   addCategoryList,
   editCategory,
@@ -11,15 +11,19 @@ import { RxCross2 } from "react-icons/rx";
 import Dropzone from "../dropeZone/Dropzone";
 import { useDropzone } from "react-dropzone";
 const CategoryForm = () => {
-  const { toggleState, category_id, initialValue } = useSelector((state) => state.categories);
+  const { toggleState, category_id, initialValue } = useSelector(
+    (state) => state.categories
+  );
   // const categoryId = category_id._id
   const [post, setPost] = useState("");
   const [items, setItems] = useState([]);
   const dispatch = useDispatch();
-  const [category_name, setCategory_name] = useState(initialValue?.category_name ? initialValue?.category_name:"" );
+  const [category_name, setCategory_name] = useState(
+    initialValue?.category_name ? initialValue?.category_name : ""
+  );
   const [fieldImage, setFieldImage] = useState();
 
-console.log(fieldImage)
+  console.log(fieldImage);
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
     setFieldImage(
       acceptedFiles.map((file) =>
@@ -41,8 +45,7 @@ console.log(fieldImage)
     },
     maxFiles: 1,
   });
-
-
+  const navigate = useNavigate()
   const saveCategory = (e) => {
     e.preventDefault();
     dispatch(addCategoryList({ category_name, items, fieldImage }));
@@ -71,10 +74,11 @@ console.log(fieldImage)
     </div>
   ));
 
-  const handleBack = ()=>{
-    dispatch(setToggleFalse())
-    dispatch(setInitialValue(""))
-  }
+  const handleBack = () => {
+    dispatch(setToggleFalse());
+    dispatch(setInitialValue(""));
+    navigate("/category");
+  };
   return (
     <div className="categoryForm">
       <div>
@@ -119,8 +123,10 @@ console.log(fieldImage)
                 {items?.map((item, id) => {
                   return (
                     <div className="save-sizes" key={id}>
-                      {item.name}{" "}
-                      <RxCross2 onClick={() => deleteItem(item.id)} />
+                      <span>
+                        {item.name}{" "}
+                        <RxCross2 onClick={() => deleteItem(item.id)} />
+                      </span>
                     </div>
                   );
                 })}
@@ -158,13 +164,9 @@ console.log(fieldImage)
             </p>
           </div>
           <div className="categoryForm-button">
-            <Link
-              to="/category"
-              className="Back-link"
-              onClick={handleBack}
-            >
+            <button className="Back-link" onClick={handleBack}>
               Back
-            </Link>
+            </button>
             {toggleState ? (
               <button
                 className="Back-link"

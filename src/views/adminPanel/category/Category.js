@@ -16,7 +16,7 @@ const Category = () => {
     dispatch(setInitialValue(item));
 
   }
-  // const columns = useMemo(() => extractColumn(category.data), []);
+
    const columns = useMemo(()=>  [
     {
       Header: "Category Name",
@@ -61,12 +61,13 @@ const Category = () => {
   }, [dispatch]);
  
 
+
   const data = useMemo(() => category?.data, [category]);
   return (
     <div className='category_main'>
       <div className='category_header'>
         <p className='category_header'>Categories</p>
-        <Link className='create_button' to="/category_form">Create New</Link>
+        <button className='create_button' onClick={()=>navigate("/category_form")}>Create New</button>
       </div>
       <div className='category-main'>
        {category?.data?.length>0 && <CategotyTable

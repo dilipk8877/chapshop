@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import customFetch from "../utils/apiGet";
 
@@ -13,7 +14,6 @@ export const getCategoryList = createAsyncThunk(
     }
   }
 );
-
 export const addCategoryList = createAsyncThunk(
   "addCategory/getCategoryList",
   async (datas, thunkAPI) => {
@@ -35,14 +35,16 @@ export const addCategoryList = createAsyncThunk(
 
 export const editCategory = createAsyncThunk("edit/getCategoryList",async(data,thunkAPI)=>{
     const {category_id,category_name,items,fieldImage} = data
+    console.log(data)
     try{
-        let fData = new FormData();
-        fData.append("category_image",fieldImage,fieldImage.name);
-        fData.append("category_name", category_name);
-        items.forEach((item) => fData.append("sizes[]", item.name));
-        fData.append("category_id", category_id._id);
+    let fData = new FormData();
+    fData.append("category_id", category_id._id);
+    fData.append("category_name", category_name);
+    items.forEach((item) => fData.append("sizes[]", item.name));
+    // fData.append("category_image",fieldImage,fieldImage.name);
+    fieldImage.forEach((image)=>fData.append("category_image",image,image.name))
         const res = await customFetch.put("/category/updateCategory", fData);
-        thunkAPI.dispatch(getCategoryList(data));
+        thunkAPI.dispatch(getCategoryList());
         return res.data;
     }catch(error){
         console.log(error)
@@ -98,6 +100,16 @@ const categorySlice = createSlice({
     [getCategoryList.pending]: (state, action) => {
       state.status = "error";
     },
+    [addCategoryList.fulfilled]:(state,action)=>{
+    toast.success('Category Created Successfully!');
+      const navigate = useNavigate()
+      navigate('/category')
+    },
+    [editCategory.fulfilled]:(state,action)=>{
+      toast.success('Category Updated Successfully!');
+      const navigate = useNavigate()
+      navigate('/category')
+    }
   },
 });
 export const { setInitialValue,setCategoryId,setTogglePromo,setToggleFalse} = categorySlice.actions

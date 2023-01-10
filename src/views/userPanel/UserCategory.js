@@ -3,8 +3,8 @@ import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserCategory } from "../../feature/UserCategorySlice";
-import { getUserProductList } from "../../feature/UserProductListSlice";
-import { useNavigate } from "react-router-dom";
+import { getUserProductList, setProductListID } from "../../feature/UserProductListSlice";
+import { useNavigate, useParams } from "react-router-dom";
 
 const UserCategory = () => {
   const userCategory = useSelector(
@@ -17,10 +17,10 @@ const UserCategory = () => {
     dispatch(getUserCategory());
   }, [dispatch]);
 
-
   const goProductList = (item)=>{
-    dispatch(getUserProductList(item._id))
-    navigate(`/productList`)
+    // dispatch(getUserProductList(item._id))
+    dispatch(setProductListID(item._id))
+    navigate(`/userCategory/productList/${item._id}`)
   }
   return (
     <div className="user-main">

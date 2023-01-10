@@ -18,12 +18,18 @@ export const getUserProductList = createAsyncThunk(
 const initialState = {
   status: null,
   userproductList: [],
+  productListID:null
 };
 
 const UserProductListSlice = createSlice ({
     name:"userproductList",
     initialState,
-    reducers:{},
+    reducers:{
+      setProductListID:(state,action)=>{
+        console.log(action)
+        state.productListID = action.payload
+      }
+    },
     extraReducers:{
         [getUserProductList.pending]:(state,action)=>{
             state.status="loading..."
@@ -38,5 +44,5 @@ const UserProductListSlice = createSlice ({
     }
 })
 
-
+export const {setProductListID} = UserProductListSlice.actions
 export default UserProductListSlice.reducer

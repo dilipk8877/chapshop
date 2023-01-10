@@ -75,21 +75,9 @@ const Product = () => {
     <div>
       <div className="product_header">
         <p className="product_header">Products</p>
-        <Link className="create_button" to="/product_form">
+        <button className="create_button"  onClick={()=>navigate("/product_form")}>
           Create New
-        </Link>
-      </div>
-      <div className="product_search">
-        {/* <DropDown/> */}
-        <select className="product-Select-Category">
-          <option value="sd">Select Categoty</option>
-          <option value="sd">sdfsd</option>
-          <option value="sd">sdfsd</option>
-          <option value="sd">sdfsd</option>
-          <option value="sd">sdfsd</option>
-          <option value="sd">sdfsd</option>
-        </select>
-        {/* <input type="search" placeholder="Search Here"  /> */}
+        </button>
       </div>
       <div className="category-main">
         {product?.data?.length>0 && <ProductTable data={data} columns={columns} />}

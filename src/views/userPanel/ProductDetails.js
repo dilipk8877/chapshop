@@ -1,15 +1,26 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Carousel from "react-bootstrap/Carousel";
 import {MdFileDownload} from "react-icons/md"
 import { saveAs } from 'file-saver'
+import { getProductDeatils } from "../../feature/UserProductDetails";
 const ProductDetails = () => {
   const prod_details = useSelector(
     (state) => state.userProductDetail.proDetails
   );
-  console.log(prod_details);
+  const {productListID} = useSelector((state)=>state.userProductList)
+  console.log(productListID)
+  const navigate = useNavigate()
+  const {id} = useParams()
+
+  const dispatch = useDispatch()
+    useEffect(()=>{
+      dispatch(getProductDeatils(id));
+    },[])
+
+
 const image_url = prod_details?.data?.sharing_images
 console.log(image_url)
   const downloadImage = () => {
@@ -22,14 +33,16 @@ console.log(image_url)
     // saveAs('image_url', 'image.jpg') // Put your image url here.
     // image_url.forEach(({filename,mimetype,originalname})=>saveAs("http://chapshopbackend.s3-website.ap-south-1.amazonaws.com/"+filename,originalname))
     // saveAs(URL.createObjectURL("http://chapshopbackend.s3-website.ap-south-1.amazonaws.com/sharingImages/1673243511056-mediamodifier-7cERndkOyDw-unsplash.jpg"),'image.jpg')
-
+const goProductList = ()=>{
+  navigate(`/userCategory/productList/${productListID}`)
+}
   
   return (
     <>
       <div className="productList-header">
-        <Link className="productList-link" to="/productList">
+        <button className="productList-button" onClick={()=>goProductList(id)}>
           <AiOutlineArrowLeft /> Back
-        </Link>
+        </button>
       </div>
       <div className="productDetails-card">
         <div className="productDetails-first">

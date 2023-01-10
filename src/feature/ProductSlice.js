@@ -69,10 +69,10 @@ export const editProductList = createAsyncThunk(
     try {
       let fData = new FormData();
       mainImage.forEach((image) =>
-        fData.append("mainImage", image, image.name)
+        fData.append("main_image", image, image.name)
       );
       sharingImages.forEach((image) =>
-        fData.append("sharingImages", image, image.name)
+        fData.append("sharing_images", image, image.name)
       );
       fData.append("product_name", product_name);
       fData.append("buying_price", buying_price);
@@ -83,7 +83,7 @@ export const editProductList = createAsyncThunk(
       sizes.forEach((item) => fData.append("sizes[]", item));
       const res = await customFetch.put("product/updateProduct", fData);
       console.log(fData)
-      thunkAPI.dispatch(getProductList(data))
+      thunkAPI.dispatch(getProductList())
       return res.data
     } catch (error) {
       console.log(error);

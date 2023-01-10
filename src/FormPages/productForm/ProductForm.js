@@ -1,3 +1,4 @@
+import { HttpStatusCode } from "axios";
 import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useDispatch, useSelector } from "react-redux";
@@ -68,9 +69,6 @@ const ProductForm = () => {
         is_draft: false,
       })
     );
-    setTimeout(() => {
-      navigate("/product");
-    }, [3000]);
   };
 
   const handleUpdate = (e) => {
@@ -88,9 +86,6 @@ const ProductForm = () => {
         product_id:product_id,
       })
     );
-    setTimeout(() => {
-      navigate("/product");
-    }, [3000]);
   };
 
 
@@ -105,6 +100,11 @@ const ProductForm = () => {
       <img src={file.preview} alt={file.name} width="150" height="150" />
     </div>
   ));
+
+  const goBack = ()=>{
+    dispatch(setToggleProductFormTrue())
+    navigate("/product")
+  }
   return (
     <div className="productForm">
       <div className="productForm-main">
@@ -215,13 +215,12 @@ const ProductForm = () => {
             </div>
         </div>
         <div className="productForm-button">
-          <Link
-            to="/product"
+          <button
             className="Back-link"
-            onClick={() => dispatch(setToggleProductFormTrue())}
+            onClick={goBack}
           >
             Retour
-          </Link>
+          </button>
           {toggleProductForm ? (
             <button onClick={handleSubmit}>Submit</button>
           ) : (

@@ -1,26 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "@mui/material/Card";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import { Link, useNavigate } from "react-router-dom";
-import { getProductDeatils } from "../../feature/UserProductDetails";
+import {  useNavigate, useParams } from "react-router-dom";
+import { getUserProductList, setProductListID } from "../../feature/UserProductListSlice";
 const ProductList = () => {
   const productList = useSelector(
     (state) => state.userProductList.userproductList
   );
   console.log(productList);
+  const {id} = useParams()
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  useEffect(()=>{
+    dispatch(getUserProductList(id))
+  },[])
   const goProductDetails = (item) => {
-    dispatch(getProductDeatils(item._id));
-    navigate("/productDetails");
+    // dispatch(getProductDeatils(item._id));
+    navigate(`/productDetails/${item._id}`);
   };
+  const goUserHomePage = ()=>{
+    navigate("/userCategory")
+  }
   return (
     <div>
       <div className="productList-header">
-        <Link className="productList-link" to="/userCategory">
+        <button className="productList-link" onClick={()=>goUserHomePage()}>
           <AiOutlineArrowLeft /> Back
-        </Link>
+        </button>
       </div>
       {productList?.length === 0 ? (
         <div>no data found</div>
