@@ -2,17 +2,18 @@ import { HttpStatusCode } from "axios";
 import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
 import { getCategoryList } from "../../feature/CategorySlice";
-import { addProduct, editProductList, setToggleProductFormTrue } from "../../feature/ProductSlice";
+import { addProduct, editProductList, setToggleProductFormTrue, singleProductList } from "../../feature/ProductSlice";
 import MainDragzone from "./dragzone/MainDragzone";
 import SharingDragzone from "./dragzone/SharingDragZone";
 const ProductForm = () => {
   const category = useSelector((store) => store.categories.category);
-  const { toggleProductForm, product_id } = useSelector(
+  const { toggleProductForm, product_id,singleProduct } = useSelector(
     (state) => state.products
   );
+  console.log(singleProduct)
   const [productName, setProductName] = useState();
   const [sku, setSku] = useState();
   const [buyingrice, setBuyingPrice] = useState();
@@ -21,6 +22,14 @@ const ProductForm = () => {
   const [mainImage, setMainImage] = useState([]);
   const [sharingImage, setSharingImage] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
+
+  useEffect(()=>{
+    setProductName(singleProduct && singleProduct?.data?.product_name ? singleProduct?.data?.product_name:"")
+    setSku(singleProduct && singleProduct?.data?.sku ? singleProduct?.data?.sku:"")
+    setBuyingPrice(singleProduct && singleProduct?.data?.buying_price ? singleProduct?.data?.buying_price:"")
+    setResellingPrice(singleProduct && singleProduct?.data?.reselling_price ? singleProduct?.data?.reselling_price:"")
+    setMainImage(singleProduct && singleProduct?.data?.main_image[0].filename ? singleProduct?.data?.main_image[0].filename:[])
+  },[singleProduct])
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const categoryFiltered = category?.data?.filter(
@@ -41,9 +50,10 @@ const ProductForm = () => {
       id: item[1],
     })
   );
-
+const {id} = useParams()
   useEffect(() => {
     dispatch(getCategoryList());
+    dispatch(singleProductList(id))
   }, []);
 
   const handleChecked = (e) => {

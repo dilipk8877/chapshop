@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import {
   addCategoryList,
   editCategory,
+  populateCategory,
   setInitialValue,
   setToggleFalse,
 } from "../../feature/CategorySlice";
@@ -11,19 +12,23 @@ import { RxCross2 } from "react-icons/rx";
 import Dropzone from "../dropeZone/Dropzone";
 import { useDropzone } from "react-dropzone";
 const CategoryForm = () => {
-  const { toggleState, category_id, initialValue } = useSelector(
+  const { toggleState, category_id, initialValue,Createnavigate,populate } = useSelector(
     (state) => state.categories
-  );
-  // const categoryId = category_id._id
+    );
+    const navigate = useNavigate()
+console.log(populate?.data?.sizes)
   const [post, setPost] = useState("");
   const [items, setItems] = useState([]);
+  console.log(items)
   const dispatch = useDispatch();
-  const [category_name, setCategory_name] = useState(
-    initialValue?.category_name ? initialValue?.category_name : ""
-  );
+  const [category_name, setCategory_name] = useState();
   const [fieldImage, setFieldImage] = useState();
+  useEffect(()=>{
+    setCategory_name(populate && populate?.data?.category_name ? populate?.data?.category_name : "")
+    setItems(populate && populate?.data?.sizes ? populate?.data?.sizes :[])
+    setFieldImage(populate && populate?.data?.category_image?.filename ? populate?.data?.category_image?.filename:"")
+  },[populate])
 
-  console.log(fieldImage);
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
     setFieldImage(
       acceptedFiles.map((file) =>
@@ -34,9 +39,13 @@ const CategoryForm = () => {
     );
   }, []);
 
+const {id} = useParams()
   useEffect(() => {
-    fieldImage?.forEach((file) => URL.revokeObjectURL(file.preview));
-  }, [fieldImage]);
+    if(Createnavigate === "success"){
+      navigate("/category")
+    }
+    dispatch(populateCategory(id))
+  }, [fieldImage,Createnavigate]);
   const { getRootProps, getInputProps, isDragAccept } = useDropzone({
     onDrop,
     accept: {
@@ -45,20 +54,19 @@ const CategoryForm = () => {
     },
     maxFiles: 1,
   });
-  const navigate = useNavigate()
   const saveCategory = (e) => {
     e.preventDefault();
-    dispatch(addCategoryList({ category_name, items, fieldImage }));
+    dispatch(addCategoryList({ category_name, items, fieldImage }))
   };
 
   const updateCategory = (e) => {
     e.preventDefault();
-    dispatch(editCategory({ category_name, items, fieldImage, category_id }));
+    dispatch(editCategory({ category_name, items, fieldImage, category_id }))
   };
 
   const addSizes = () => {
-    const allpost = { id: new Date().getTime().toString(), name: post };
-    setItems([...items, allpost]);
+    // const allpost = { id: new Date().getTime().toString(), name: post };
+    setItems([...items,post]);
     setPost("");
   };
   const deleteItem = (current_index) => {
@@ -68,17 +76,14 @@ const CategoryForm = () => {
     setItems(updatedItems);
   };
 
-  const thumbs = fieldImage?.map((file) => (
-    <div key={file.name}>
-      <img src={file.preview} alt={file.name} width="150" height="150" />
-    </div>
-  ));
 
   const handleBack = () => {
     dispatch(setToggleFalse());
     dispatch(setInitialValue(""));
     navigate("/category");
   };
+  const imageUrl=`http://chapshopbackend.s3-website.ap-south-1.amazonaws.com/${fieldImage}`;
+
   return (
     <div className="categoryForm">
       <div>
@@ -121,10 +126,11 @@ const CategoryForm = () => {
               </button>
               <div className="category-size custom-flexwrap">
                 {items?.map((item, id) => {
+                  console.log(item);
                   return (
                     <div className="save-sizes" key={id}>
                       <span>
-                        {item.name}{" "}
+                        {item}{" "}
                         <RxCross2 onClick={() => deleteItem(item.id)} />
                       </span>
                     </div>
@@ -141,7 +147,9 @@ const CategoryForm = () => {
                 <input {...getInputProps()} />
                 {isDragAccept ? "Drag Active" : "You can drop your file here."}
               </div>
-              <div className="sharing-image">{thumbs}</div>
+              <div className="sharing-image">
+                <img src={imageUrl} alt=""  />
+              </div>
               {/* <input
                 type="file"
                 className="category-file"

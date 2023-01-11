@@ -351,15 +351,15 @@
 }
 
 .loginForm-form{
-  width: 250px;
-  height: 270px;
-  background-color: rgb(245, 91, 91);
+  width: 300px;
+  height: 300px;
+  background-color: rgba(54, 68, 68, 0.644);
   padding: 10px;
   border-radius: 10px;
 }
 
 .loginForm-form input{
-  width: 230px;
+  width: 95%;
   height: 6vh;
   border-radius: 5px;
   border: 1px solid grey;
@@ -367,8 +367,6 @@
   padding-left: 5px;
   /* font-size: 20px; */
   font-weight: 500;
-  margin-top: 5px;
-  margin-bottom: 30px;
 }
 
 .loginForm-form button{
@@ -378,14 +376,16 @@
   background-color: #3076d2;
   padding: 10px;
   color: white;
-  width: 240px;
+  width: 98%;
   font-size: 16px;
   cursor: pointer;
+  margin-top: 20px;
 }
 
-.loginForm-form label{
-  color: #ffffff;
+.loginForm-email, .loginForm-password{
+  height: 15vh;
 }
+
 input.form-control, input.form-control:focus {
   background: #F0F0FF;
 }
@@ -402,8 +402,8 @@ input.form-control, input.form-control:focus {
 }
 
 .category-name-image img {
-  width: 60px;
-  height: 7vh;
+  width: 70px;
+  height: 10vh;
 }
 
 .category-name-image p {
@@ -492,8 +492,14 @@ input.form-control, input.form-control:focus {
   display: flex;
   gap: 20px;
   justify-content: start;
+  width: 150px;
+  height: 150px;
 }
 
+.sharing-image img {
+  width: 150px;
+  height: 150px;
+}
 /* .global-search {
   position: relative;
   bottom: 70px;

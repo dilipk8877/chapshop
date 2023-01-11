@@ -13,6 +13,18 @@ export const getProductList = createAsyncThunk(
   }
 );
 
+export const singleProductList = createAsyncThunk(
+  "singleProduct/getProduct",
+  async (id) => {
+    try {
+      const res = await customFetch.get(`product/getProduct/${id}`);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 export const addProduct = createAsyncThunk(
   "addProduct/getProductList",
   async (data, thunkAPI) => {
@@ -109,6 +121,7 @@ const initialState = {
   product: [],
   product_id: null,
   toggleProductForm: true,
+  singleProduct:[]
 };
 
 const productSlice = createSlice({
@@ -135,6 +148,16 @@ const productSlice = createSlice({
       state.status = "success";
     },
     [getProductList.rejected]: (state, action) => {
+      state.status = "error";
+    },
+    [singleProductList.pending]: (state, action) => {
+      state.status = "loading...";
+    },
+    [singleProductList.fulfilled]: (state, action) => {
+      state.singleProduct = action.payload;
+      state.status = "success";
+    },
+    [singleProductList.rejected]: (state, action) => {
       state.status = "error";
     },
   },

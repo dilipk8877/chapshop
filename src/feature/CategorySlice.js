@@ -36,6 +36,7 @@ export const addCategoryList = createAsyncThunk(
 export const editCategory = createAsyncThunk("edit/getCategoryList",async(data,thunkAPI)=>{
     const {category_id,category_name,items,fieldImage} = data
     console.log(data)
+    const navigate = useNavigate()
     try{
     let fData = new FormData();
     fData.append("category_id", category_id._id);
@@ -62,12 +63,24 @@ export const deleteCategory = createAsyncThunk("delete/getCategoryList",async(id
     }
 })
 
+
+export const populateCategory = createAsyncThunk("getCategory/populateCategory",async(id)=>{
+  try{
+    const res = await customFetch.get(`category/getCategory/${id}`);
+    return res.data;
+  }catch(error){
+    console.log(error);
+  }
+}) 
+
 const initialState = {
   status: null,
   category: [],
   category_id:null,
   toggleState: true,
-  initialValue:null
+  initialValue:null,
+  Createnavigate:null,
+  populate:[]
 };
 
 const categorySlice = createSlice({
@@ -97,18 +110,26 @@ const categorySlice = createSlice({
       state.status = "success";
       state.category = action.payload;
     },
-    [getCategoryList.pending]: (state, action) => {
+    [getCategoryList.rejected]: (state, action) => {
+      state.status = "error";
+    },
+    [populateCategory.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [populateCategory.fulfilled]: (state, action) => {
+      state.status = "success";
+      state.populate = action.payload;
+    },
+    [populateCategory.rejected]: (state, action) => {
       state.status = "error";
     },
     [addCategoryList.fulfilled]:(state,action)=>{
     toast.success('Category Created Successfully!');
-      const navigate = useNavigate()
-      navigate('/category')
+    state.Createnavigate = "success"
     },
     [editCategory.fulfilled]:(state,action)=>{
       toast.success('Category Updated Successfully!');
-      const navigate = useNavigate()
-      navigate('/category')
+      state.Createnavigate = "success"
     }
   },
 });

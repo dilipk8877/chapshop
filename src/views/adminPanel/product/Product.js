@@ -11,7 +11,8 @@ const Product = () => {
   const eidtRowItem = (item)=>{
     dispatch(setProductId(item))
     dispatch(setToggleProductFormFalse())
-    navigate("/product_form")
+    navigate(`/product_form/${item._id}`)
+
   }
   const columns = useMemo(
     () => [

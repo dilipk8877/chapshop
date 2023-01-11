@@ -4,11 +4,12 @@ import { useSortBy, useTable, usePagination, useGlobalFilter } from "react-table
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import GlobalSearch from "../../views/adminPanel/product/globalFilter/GlobalSearch";
 
-const CategotyTable = ({ data, columns }) => {
+const CategotyTable = ({ data, columns,LoadingComponent }) => {
   const tableInstance = useTable(
     {
       columns,
       data,
+      LoadingComponent,
       initialState: { pageIndex: 0 },
     },
     useGlobalFilter,

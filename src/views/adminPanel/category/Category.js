@@ -1,19 +1,21 @@
 import React, { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
+import Loader from '../../../component/Loader'
 import { deleteCategory, getCategoryList, setCategoryId, setInitialValue, setTogglePromo } from '../../../feature/CategorySlice'
 import { setToggleProductFormTrue } from '../../../feature/ProductSlice'
 import CategotyTable from '../../../FormPages/reactTable/CategoryTable'
-
+import loader from "../../../assest/loading-buffering.gif"
 const Category = () => {
   const category = useSelector((store)=>store.categories.category)
+  const { isLogin } = useSelector((state) => state.auth);
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const eidtRowItem = (item)=>{
     dispatch(setCategoryId(item))
     dispatch(setTogglePromo())
-    navigate("/category_form")
-    dispatch(setInitialValue(item));
+    navigate(`/category_form/${item._id}`)
+    // dispatch(setInitialValue(item));
 
   }
 
@@ -57,8 +59,9 @@ const Category = () => {
   ],[]);
 
   useEffect(() => {
+    if(isLogin)
     dispatch(getCategoryList())
-  }, [dispatch]);
+  }, [isLogin]);
  
 
 
@@ -72,7 +75,8 @@ const Category = () => {
       <div className='category-main'>
        {category?.data?.length>0 && <CategotyTable
        data={data}
-       columns={columns}/>}
+       LoadingComponent={loader}
+       columns={columns}/> }
       </div>
     </div>
   )
